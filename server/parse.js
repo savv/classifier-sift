@@ -3,6 +3,20 @@
  */
 'use strict';
 
+var spawnSync = require('child_process').spawnSync;
+
+function hasSchedulingIntent(email) {
+  // Convert email object into a one-line text similar to our fastText training samples.
+  let text = email.textBody || email.strippedHtmlBody || '';
+  text = 'SUBJECT: ' + (email.subject || '') + ' ' + text;
+  text = text.replace(/\n/g, ' ');
+
+  // Call the fastText binary and return true or false depending on its output.
+  var resp = spawnSync(
+    './fastText/fasttext', ['predict', 'fastText/model.bin', '-'], {input: text + '\n'})
+  return resp.stdout.toString() == '__label__Scheduling_Intent\n';
+}
+
 // Javascript nodes are run in a Node.js sandbox so you can require dependencies following the node paradigm
 // e.g. var moment = require('moment');
 
@@ -20,7 +34,10 @@ module.exports = function (got) {
     const jmapInfo = JSON.parse(datum.value);
     // Not all emails contain a textBody so we do a cascade selection
     const body = jmapInfo.textBody || jmapInfo.strippedHtmlBody || '';
-    const wordsValue = { words: countWords(body) };
+    const wordsValue = {
+        words: countWords(body),
+        schedIntent: hasSchedulingIntent(jmapInfo)
+    };
     // Emit into "messages" stores so count can be calculated by the "Count" node
     results.push({ name: 'messages', key: jmapInfo.id, value: wordsValue });
     // Emit information on the thread id so we can display them in the email list and detail
