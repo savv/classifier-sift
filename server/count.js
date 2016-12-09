@@ -6,7 +6,7 @@
 // Entry point for DAG node
 module.exports = function (got) {
   const inData = got.in;
-  let emailStats = [];
+  let emailStats = inData.data.map(d => JSON.parse(d.value)).filter(x => x.schedIntent);
 
   try{
     emailStats = inData.data.map(d => JSON.parse(d.value));
