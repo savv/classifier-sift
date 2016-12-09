@@ -1,0 +1,9 @@
+{
+  "name": "classifier-sift",
+  "display-name": "Classifier Sift Sift",
+  "description": "",
+  "author": "",
+  "version": "1.0.0",
+  "#": "Please use 'redsift npm' instead of system 'npm' ",
+  "dependencies": {}
+}

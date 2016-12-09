@@ -1,0 +1,104 @@
+{
+  "name": "classifier-sift",
+  "display-name": "Classifier Sift Sift",
+  "description": "",
+  "author": "",
+  "version": "1.0.0",
+  "icon": "assets/blueprint.svg",
+  "interfaces": {
+    "email": {
+      "thread" : {
+        "controller": "dist/js/controller.umd-es2015.js"
+      },
+      "client" : {
+        "controller": "dist/js/email-client-controller.umd-es2015.js"
+      }
+    },
+    "summary": {
+      "controller": "dist/js/controller.umd-es2015.js"
+    }
+  },
+  "dag": {
+    "inputs":{
+      "emails":{
+        "gmailEmails":{
+          "filter":{
+            "conditions":[{
+              "from":{
+                "regexp": {
+                  "pattern": ".*@gmail\\.com",
+                  "flags": "i"
+                }
+              }
+            },{
+              "date": "between now and 1 month before now"
+            }],
+            "operator": "AND"
+          },
+          "wants": [
+            "archive",
+            "textBody",
+            "strippedHtmlBody"
+          ]
+        }
+      }
+    },
+    "nodes":[{
+      "#": "Parse",
+      "implementation": {
+        "javascript": "server/parse.js"
+      },
+      "input": {
+          "bucket": "gmailEmails"
+      },
+      "outputs": {
+          "messages": {},
+          "threadMessages": {}
+      }
+    },
+    {
+      "#": "Count",
+      "implementation": {
+        "javascript": "server/count.js"
+      },
+      "input": {
+          "bucket": "messages",
+          "select": "*"
+      },
+      "outputs": {
+          "count": {}
+      }
+    },
+    {
+      "#": "Count Threads",
+      "implementation": {
+        "javascript": "server/threads.js"
+      },
+      "input": {
+          "bucket": "threadMessages",
+          "select": "/*"
+      },
+      "outputs": {
+          "threads": {}
+      }
+    }],
+    "stores":{
+      "messages" : {
+        "key$schema":"string"
+      },
+      "threadMessages" : {
+        "key$schema":"string/string"
+      }
+    },
+    "outputs":{
+      "exports":{
+        "count" : {
+          "key$schema":"string"
+        },
+        "threads": {
+          "import": "_email.tid"
+        }
+      }
+    }
+  }
+}
