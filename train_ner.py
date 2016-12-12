@@ -11,7 +11,7 @@ from spacy.tagger import Tagger
 
 def train_ner(nlp, train_data, entity_types):
     ner = EntityRecognizer(nlp.vocab, entity_types=entity_types)
-    for itn in range(5):
+    for itn in range(50):
         random.shuffle(train_data)
         for raw_text, entity_offsets in train_data:
             doc = nlp.make_doc(raw_text)
@@ -55,7 +55,7 @@ def main(model_dir=None):
 
 
 if __name__ == '__main__':
-    main()
+    main('ner')
     # Who "" 2
     # is "" 2
     # Shaka "" PERSON 3
