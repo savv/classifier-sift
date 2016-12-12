@@ -55,6 +55,18 @@
           "messages": {},
           "threadMessages": {}
       }
+    }, {
+      "#": "Tagger",
+      "implementation": {
+        "python": "server/ner_node.py",
+        "sandbox": "quay.io/redsift/sandbox-python:v3.4.3"
+      },
+      "input": {
+          "bucket": "gmailEmails"
+      },
+      "outputs": {
+        "messages": {}
+      }
     },
     {
       "#": "Count",
