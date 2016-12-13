@@ -55,20 +55,10 @@ def main(model_dir=None):
         print('-----------------')
         nlp.tagger = Tagger(nlp.vocab, features=Tagger.feature_templates)
 
-    train_data = [
-        (
-            'Who is Shaka Khan?',
-            [(len('Who is '), len('Who is Shaka Khan'), 'PERSON')]
-        ),
-        (
-            'I like London and Berlin.',
-            [(len('I like '), len('I like London'), 'LOC'),
-            (len('I like London and '), len('I like London and Berlin'), 'LOC')]
-        )
-    ]
-    ner = train_ner(nlp, train_data, ['PERSON', 'LOC'])
+    train_data = json.load(open('train_ner.json'))
+    ner = train_ner(nlp, train_data, ['Event_Time'])
 
-    doc = nlp.make_doc('Who is Shaka Khan?')
+    doc = nlp.make_doc('how about coffee tomorrow at 5pm?')
     nlp.tagger(doc)
     ner(doc)
     for word in doc:
