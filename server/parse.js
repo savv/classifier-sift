@@ -13,7 +13,7 @@ function hasSchedulingIntent(email) {
 
   // Call the fastText binary and return true or false depending on its output.
   var resp = spawnSync(
-    './fastText/fasttext', ['predict', 'fastText/model.bin', '-'], {input: text + '\n'})
+    './server/fastText/fasttext', ['predict', 'server/fastText/model.bin', '-'], {input: text + '\n'})
   return resp.stdout.toString() == '__label__Scheduling_Intent\n';
 }
 
