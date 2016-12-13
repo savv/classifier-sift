@@ -57,6 +57,19 @@
       }
     },
     {
+      "#": "Tagger",
+      "implementation": {
+        "python": "server/ner_node.py",
+        "sandbox": "quay.io/redsift/sandbox-scipy:v3.4.3"
+      },
+      "input": {
+        "bucket": "messages"
+      },
+      "outputs": {
+        "messages": {}
+      }
+    },
+    {
       "#": "Count",
       "implementation": {
         "javascript": "server/count.js"
