@@ -18,7 +18,7 @@ def train_ner(nlp, train_data, entity_types):
 
     # Train NER.
     ner = EntityRecognizer(nlp.vocab, entity_types=entity_types)
-    for itn in range(5):
+    for itn in range(50):
         random.shuffle(train_data)
         for raw_text, entity_offsets in train_data:
             doc = nlp.make_doc(raw_text)
