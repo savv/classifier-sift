@@ -34,9 +34,11 @@ module.exports = function (got) {
     const jmapInfo = JSON.parse(datum.value);
     // Not all emails contain a textBody so we do a cascade selection
     const body = jmapInfo.textBody || jmapInfo.strippedHtmlBody || '';
+    const text = 'SUBJECT: ' + (datum.subject || '') + ' ' + body;
     const wordsValue = {
         words: countWords(body),
-        schedIntent: hasSchedulingIntent(jmapInfo)
+        schedIntent: hasSchedulingIntent(jmapInfo),
+        text: text
     };
     // Emit into "messages" stores so count can be calculated by the "Count" node
     results.push({ name: 'messages', key: jmapInfo.id, value: wordsValue });
